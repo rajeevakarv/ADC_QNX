@@ -99,20 +99,20 @@ void InitializeSerialPort(void)
 
 void InitializePWM0() {
 
- PWMCLK_PCLK0=1;
- PWMPOL_PPOL0=1;
- PWMSCLA=0x50;
- PWMPER0=0xFF; 
- PWME_PWME0=1;
+ PWMCLK_PCLK0 = 1;
+ PWMPOL_PPOL0 = 1;
+ PWMSCLA = 0x50;
+ PWMPER0 = 0xFF; 
+ PWME_PWME0 = 1;
 }
 
 void InitializePWM2() {
  
- PWMCLK_PCLK2=1;
- PWMPOL_PPOL2=1;   
- PWMSCLB=0x50;
- PWMPER2=0xFF;
- PWME_PWME2=1;
+ PWMCLK_PCLK2 = 1;
+ PWMPOL_PPOL2 = 1;   
+ PWMSCLB = 0x50;
+ PWMPER2 = 0xFF;
+ PWME_PWME2 = 1;
 }
 
 // Initializes I/O and timer settings for the demo.
@@ -249,12 +249,12 @@ void run(){
 
    if(servoA == TRUE) {
        
-   InitializePWM0();
-   PWMDTY0=motorPosition*2;
+//   InitializePWM0();
+   PWMDTY0 = motorPosition;
    } else if(servoB == TRUE) {
    
-   InitializePWM2();
-   PWMDTY2=motorPosition*2;
+  // InitializePWM2();
+   PWMDTY2 = motorPosition;
    }
    
 }
@@ -291,7 +291,6 @@ void interrupt 9 OC1_isr( void ) {
              servoB = FALSE;                           // If push button is pushed, diable both servos.
              servoA = FALSE;
          }
-   
           run();
    
    
@@ -317,6 +316,8 @@ void main(void)
   
   InitializeSerialPort();
   InitializeTimer();
+  InitializePWM0();
+  InitializePWM2();
   
   temp = PORTA;
   (void)printf("temp = %d \n\r", temp ); 
@@ -325,13 +326,13 @@ void main(void)
   
   // if we pass post run the program otherwise go home.
  //start of main loop
-     for(;;) {
+    for(;;) {
           if( (PORTA & 0x01) == 0) {
             
               motorControlLogic = ~motorControlLogic;
               for(i=32000; i>0; --i){
               }
-              (void)printf("Control = %d \n\r", motorPosition ); 
+              (void)printf("Control = %d,  motorPosition = %d\n\r", motorControlLogic, motorPosition ); 
           }
      }
      
